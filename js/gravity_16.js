@@ -50,8 +50,8 @@ var obs = []
     var skewed_red = Vertices.fromPath('270.7,0 91,0 179.7,83.5 359.4,83.5')
     var skew_cir = Vertices.fromPath('26.2,0 15.1,0 5.5,13 0,35.4 0,61.3 5.5,83.7 15.1,96.6 26.2,96.6 35.8,83.7 41.4,61.3 41.4,35.4 35.8,13')
     var face_r = 75
-if(window.location.hash){
-    var value_array_n = window.location.hash.split('#')[1].split(',')
+    var value = '#0.075,0.05,0.025,1.2,0.6,0,true,15000,0.1,75,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1'
+    var value_array_n = value.split('#')[1].split(',')
     var blue_fric = Number(value_array_n[0])
     var red_fric = Number(value_array_n[1])
     var yellow_fric = Number(value_array_n[2])
@@ -74,17 +74,6 @@ $('.face_wraps>div').css({'transform': 'scale(' + face_r / 75 + ') '})
       }
     }
 })
-}else{
-    var blue_fric = 0.1
-    var red_fric = 0.05
-    var yellow_fric = 0.01
-    var yellow_sec = 1
-    var blue_sec = 5
-    var red_sec = 3
-    var isground = true
-    var reset_term = 5000
-    var res = 0.1
-}
 
     var offset = h*1.5
     var render_setting = [

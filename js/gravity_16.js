@@ -50,7 +50,9 @@ var obs = []
     var skewed_red = Vertices.fromPath('270.7,0 91,0 179.7,83.5 359.4,83.5')
     var skew_cir = Vertices.fromPath('26.2,0 15.1,0 5.5,13 0,35.4 0,61.3 5.5,83.7 15.1,96.6 26.2,96.6 35.8,83.7 41.4,61.3 41.4,35.4 35.8,13')
     var face_r = 75
+    console.log(window.location.hash)
     var value = '#0.075,0.05,0.025,1.2,0.6,0,true,15000,0.1,75,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1'
+    console.log(value === value)
     var value_array_n = value.split('#')[1].split(',')
     var blue_fric = Number(value_array_n[0])
     var red_fric = Number(value_array_n[1])
@@ -64,7 +66,6 @@ var obs = []
     var face_r = Number(value_array_n[9])
 $('document').ready(function(){
 $('.face_wraps>div').css({'transform': 'scale(' + face_r / 75 + ') '})
-    if(window.location.hash){
       for (var i = 0; i < $('.value_input').length; i++) {
         $('.value_input').eq(i).val(value_array_n[i])
       }
@@ -72,7 +73,6 @@ $('.face_wraps>div').css({'transform': 'scale(' + face_r / 75 + ') '})
             if(value_array_n[i]  == 1){
                 document.getElementById("checkbox_"+(i-9)).checked = true;}
       }
-    }
 })
 
     var offset = h*1.5
@@ -236,7 +236,6 @@ $('.face_wraps>div').css({'transform': 'scale(' + face_r / 75 + ') '})
         }
     }
 
-if(window.location.hash){
     for (var i =  9; i < value_array_n.length-4; i++) {
         if(value_array_n[i] == 1){
             obj.push(obj_pre[i-10])
@@ -244,7 +243,6 @@ if(window.location.hash){
 
         }
     }
-}
 Array.prototype.max = function() {
   return Math.max.apply(null, this);
 };

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">s
+  <script src="face-api.js"></script>
+  <!-- <script src="js/commons.js"></script> -->
+  <script src="js/faceDetectionControls.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css" type="text/css" />
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.css"> -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+<!--         <script
+          src="https://code.jquery.com/jquery-3.4.1.min.js"
+          integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+          crossorigin="anonymous"></script>  -->
+        <script src="js/matter.js"></script>
+        <script src="js/collision.js"></script>
+        <script src="decomp.js" type="text/javascript"></script>
+  <style type="text/css">
+    /*video{
+      transform: scaleX(-1);
+      width: 1000px;
+      height: 1000px;
+      position: fixed;
+      left: 0;
+      top: 0;
+    }*/
+    #dot{
+      width: 10px;
+      height: 10px;
+      background: red;
+      position: fixed;
+      z-index: 10000;
+    }
+    #option{
+      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index:1000000;
+      color:white;
+      background: black;
+      /*display: none;*/
+    }
+    .center-content{opacity: 0 !important}
+  </style>
+</head>
+<body>
+  <script>var dot_array = [[0,0],[0,0],[0,0],[0,0]]</script>
+  <script type="text/javascript" src="js/gravity_16.js"></script>
+  <div id='option'>
+    파랑 저항값 <input  type='text' class="value_input" id='blue_fric' value="0.1"><br>
+    빨강 저항값 <input  type='text' class="value_input" id='red_fric' value="0.05"><br>
+    노랑 저항값 <input  type='text' class="value_input" id='yellow_fric' value="0.01"><br>
+    파랑 떨어지는 시간  <input  type='text' class="value_input" id='red_sec' value="5">초 뒤<br>
+    빨강 떨어지는 시간  <input  type='text' class="value_input" id='blue_sec' value="3">초 뒤<br>
+    노랑 떨어지는 시간  <input  type='text'class="value_input" id='yellow_sec' value="1">초 뒤<br>
+    쌓임? <input  type='text' id='isground' class="value_input" value="true"><br>
+    재시작 텀 <input  type='text' id='reset_term' class="value_input" value="45000">ms<br>
+    bouncing <input  type='text' id='res' class="value_input" value="0.1"><br>
+    얼굴크기 (반지름)<input  type='text' id='reset_term' class="value_input" value="75">px(화면크기:1000px)<br>
+    red-01 <input  type='checkbox' class="checkbox" id='checkbox_1'><br>
+    red-02 <input  type='checkbox' class="checkbox" id='checkbox_2'><br>
+    red-3 <input  type='checkbox' class="checkbox" id='checkbox_3'><br>
+    red-4 <input  type='checkbox' class="checkbox" id='checkbox_4'><br>
+    red-5 <input  type='checkbox' class="checkbox" id='checkbox_5'><br>
+    red-6 <input  type='checkbox' class="checkbox" id='checkbox_6'><br>
+    red-7 <input  type='checkbox' class="checkbox" id='checkbox_7'><br>
+    red-8 <input  type='checkbox' class="checkbox" id='checkbox_8'><br>
+    red-9 <input  type='checkbox' class="checkbox" id='checkbox_9'><br>
+    red-10 <input  type='checkbox' class="checkbox" id='checkbox_10'><br>
+    red-11 <input  type='checkbox' class="checkbox" id='checkbox_11'><br>
+    red-12 <input  type='checkbox' class="checkbox" id='checkbox_12'><br>
+    yellow-01 <input  type='checkbox' class="checkbox" id='checkbox_13'><br>
+    yellow-02 <input  type='checkbox' class="checkbox" id='checkbox_14'><br>
+    yellow-03 <input  type='checkbox' class="checkbox" id='checkbox_15'><br>
+    yellow-04 <input  type='checkbox' class="checkbox" id='checkbox_16'><br>
+    yellow-05 <input  type='checkbox' class="checkbox" id='checkbox_17'><br>
+    yellow-06 <input  type='checkbox' class="checkbox" id='checkbox_18'><br>
+    yellow-07 <input  type='checkbox' class="checkbox" id='checkbox_19'><br>
+    yellow-08 <input  type='checkbox' class="checkbox" id='checkbox_20'><br>
+    yellow-09 <input  type='checkbox' class="checkbox" id='checkbox_21'><br>
+    yellow-10 <input  type='checkbox' class="checkbox" id='checkbox_22'><br>
+    yellow-11 <input  type='checkbox' class="checkbox" id='checkbox_23'><br>
+    yellow-12 <input  type='checkbox' class="checkbox" id='checkbox_24'><br>
+    yellow-13 <input  type='checkbox' class="checkbox" id='checkbox_25'><br>
+    blue-01 <input  type='checkbox' class="checkbox" id='checkbox_26'><br>
+    blue-02 <input  type='checkbox' class="checkbox" id='checkbox_27'><br>
+    blue-03 <input  type='checkbox' class="checkbox" id='checkbox_28'><br>
+    blue-04 <input  type='checkbox' class="checkbox" id='checkbox_29'><br>
+    blue-05 <input  type='checkbox' class="checkbox" id='checkbox_30'><br>
+    blue-06 <input  type='checkbox' class="checkbox" id='checkbox_31'><br>
+    blue-07 <input  type='checkbox' class="checkbox" id='checkbox_32'><br>
+    blue-08 <input  type='checkbox' class="checkbox" id='checkbox_33'><br>
+    blue-09 <input  type='checkbox' class="checkbox" id='checkbox_34'><br>
+    blue-10 <input  type='checkbox' class="checkbox" id='checkbox_35'><br>
+    blue-11 <input  type='checkbox' class="checkbox" id='checkbox_36'><br>
+    blue-12 <input  type='checkbox' class="checkbox" id='checkbox_37'><br>
+    blue-13 <input  type='checkbox' class="checkbox" id='checkbox_38'><br>
+    blue-14 <input  type='checkbox' class="checkbox" id='checkbox_39'><br>
+    blue-15 <input  type='checkbox' class="checkbox" id='checkbox_40'><br>
+
+    red-chain <input  type='checkbox' class="checkbox" id='checkbox_41'><br>
+    yellow-chain-1 <input  type='checkbox' class="checkbox" id='checkbox_42'><br>
+    yellow-chain-2 <input  type='checkbox' class="checkbox" id='checkbox_43'><br>
+    blue-chain <input  type='checkbox' class="checkbox" id='checkbox_44'><br>
+<button onclick="Function()">GOGOGOGO</button>
+</div>
+<script>
+function Function() {
+  var value_array = []
+  for (var i = 0; i < $('.value_input').length; i++) {
+      value_array.push($('.value_input').eq(i).val())
+              if(i==$('.value_input').length-1){
+                console.log('1')
+                for (var j = 0; j < $('.checkbox').length; j++) {
+                    if($('#checkbox_'+(j+1)).is(":checked")){
+                        value_array.push(1)
+                    }else{
+                        value_array.push(0)
+                    }
+                                if(j == $('.checkbox').length-1){
+                                    window.location.href = window.location.href.split('#')[0]  + "#" +value_array.join(',');
+                                    location.reload();
+                                }
+                } 
+              }
+  }
+}
+</script>
+  <div class="center-content page-container">
+
+    <div class="progress" id="loader">
+      <div class="indeterminate"></div>
+    </div>
+    <div style="position: relative" class="margin">
+      <video onloadedmetadata="onPlay(this)" id="inputVideo" autoplay muted playsinline></video>
+      <canvas id="overlay"/>
+    </div>
+
+    <div class="row side-by-side">
+
+      <!-- face_detector_selection_control -->
+      <div id="face_detector_selection_control" class="row input-field" style="margin-right: 20px;">
+        <select id="selectFaceDetector">
+          <option value="ssd_mobilenetv1">SSD Mobilenet V1</option>
+          <option value="tiny_face_detector">Tiny Face Detector</option>
+        </select>
+        <label>Select Face Detector</label>
+      </div>
+      <!-- face_detector_selection_control -->
+
+      <!-- fps_meter -->
+      <div id="fps_meter" class="row side-by-side">
+        <div>
+          <label for="time">Time:</label>
+           <input  disabled value="-" id="time" type="text" class="bold">
+          <label for="fps">Estimated Fps:</label>
+           <input  disabled value="-" id="fps" type="text" class="bold">
+        </div>
+      </div>
+      <!-- fps_meter -->
+
+    </div>
+
+
+    <!-- ssd_mobilenetv1_controls -->
+    <span id="ssd_mobilenetv1_controls">
+      <div class="row side-by-side">
+        <div class="row">
+          <label for="minConfidence">Min Confidence:</label>
+           <input  disabled value="0.5" id="minConfidence" type="text" class="bold">
+        </div>
+        <button
+          class="waves-effect waves-light btn"
+          onclick="onDecreaseMinConfidence()"
+        >
+          <i class="material-icons left">-</i>
+        </button>
+        <button
+          class="waves-effect waves-light btn"
+          onclick="onIncreaseMinConfidence()"
+        >
+          <i class="material-icons left">+</i>
+        </button>
+      </div>
+    </span>
+    <!-- ssd_mobilenetv1_controls -->
+
+    <!-- tiny_face_detector_controls -->
+    <span id="tiny_face_detector_controls">
+      <div class="row side-by-side">
+        <div class="row input-field" style="margin-right: 20px;">
+          <select id="inputSize">
+            <option value="" disabled selected>Input Size:</option>
+            <option value="128">128 x 128</option>
+            <option value="160">160 x 160</option>
+            <option value="224">224 x 224</option>
+            <option value="320">320 x 320</option>
+            <option value="416">416 x 416</option>
+            <option value="512">512 x 512</option>
+            <option value="608">608 x 608</option>
+          </select>
+          <label>Input Size</label>
+        </div>
+        <div class="row">
+          <label for="scoreThreshold">Score Threshold:</label>
+           <input  disabled value="0.5" id="scoreThreshold" type="text" class="bold">
+        </div>
+        <button
+          class="waves-effect waves-light btn"
+          onclick="onDecreaseScoreThreshold()"
+        >
+          <i class="material-icons left">-</i>
+        </button>
+        <button
+          class="waves-effect waves-light btn"
+          onclick="onIncreaseScoreThreshold()"
+        >
+          <i class="material-icons left">+</i>
+        </button>
+      </div>
+    </span>
+    <!-- tiny_face_detector_controls -->
+</div>
+        <div id='background' class="op_1"></div>
+        <div id='background_back'></div>
+        <div id='face_wrap_wrap'>
+          <div id='face_wrap_1' class="face_wraps">
+            <div id='face_1' class="face_w op_1"></div>
+            <div id='face_2' class='face_w op_1 face_ani'></div>
+            <div id='face_3' class="face_w op_1"></div>
+            <div id='face_4' class="face_w op_1"></div>
+            <div id='face_5' class="face_b"></div>
+            <div id='face_6' class='face_b face_ani'></div>
+            <div id='face_7' class="face_b"></div>
+            <div id='face_8' class="face_b"></div>
+          </div>
+          <div id='face_wrap_2' class="face_wraps">
+            <div id='face_1' class="face_w op_1"></div>
+            <div id='face_2' class='face_w op_1 face_ani'></div>
+            <div id='face_3' class="face_w op_1"></div>
+            <div id='face_4' class="face_w op_1"></div>
+            <div id='face_5' class="face_b"></div>
+            <div id='face_6' class='face_b face_ani'></div>
+            <div id='face_7' class="face_b"></div>
+            <div id='face_8' class="face_b"></div>
+          </div>
+          <div id='face_wrap_3' class="face_wraps">
+            <div id='face_1' class="face_w op_1"></div>
+            <div id='face_2' class='face_w op_1 face_ani'></div>
+            <div id='face_3' class="face_w op_1"></div>
+            <div id='face_4' class="face_w op_1"></div>
+            <div id='face_5' class="face_b"></div>
+            <div id='face_6' class='face_b face_ani'></div>
+            <div id='face_7' class="face_b"></div>
+            <div id='face_8' class="face_b"></div>
+          </div>
+          <div id='face_wrap_4' class="face_wraps">
+            <div id='face_1' class="face_w op_1"></div>
+            <div id='face_2' class='face_w op_1 face_ani'></div>
+            <div id='face_3' class="face_w op_1"></div>
+            <div id='face_4' class="face_w op_1"></div>
+            <div id='face_5' class="face_b"></div>
+            <div id='face_6' class='face_b face_ani'></div>
+            <div id='face_7' class="face_b"></div>
+            <div id='face_8' class="face_b"></div>
+          </div>
+        </div>
+  </body>
+
+  <script>var dot_array = [[0,0],[0,0],[0,0],[0,0]]</script>
+  <script>
+    var grid = 1
+    var new_pos_array =[[0,0],[0,0],[0,0],[0,0]]
+    var current_pos_array = [[0,0],[0,0],[0,0],[0,0]]
+    let forwardTimes = []
+    var facearray = [face1,face2,face3,face4]
+    var face_active_array = [110,110,110,110]
+    var face_angle_array = [0,0,0,0]
+function sortFunction(a, b) {
+    if (a[0] === b[0]) {
+        return 0;
+    }
+    else {
+        return (a[0] < b[0]) ? -1 : 1;
+    }
+}
+    function updateTimeStats(timeInMs) {
+        forwardTimes = [timeInMs].concat(forwardTimes).slice(0, 30)
+        const avgTimeInMs = forwardTimes.reduce((total, t) => total + t) / forwardTimes.length
+        $('#time').val(`${Math.round(avgTimeInMs)} ms`)
+        $('#fps').val(`${faceapi.utils.round(1000 / avgTimeInMs)}`)
+    }
+    function map_range(value, low1, high1, low2, high2) {
+        return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+    }
+    async function onPlay() {
+        const videoEl = document.getElementById('inputVideo')
+
+        if(videoEl.paused || videoEl.ended || !isFaceDetectionModelLoaded())
+        return setTimeout(() => onPlay())
+
+
+      const options = getFaceDetectorOptions()
+
+      const ts = Date.now()
+      const result = await faceapi.detectAllFaces(videoEl, options)
+      updateTimeStats(Date.now() - ts)
+      if (result) {
+        const canvas = $('#overlay').get(0)
+        const dims = faceapi.matchDimensions(canvas, videoEl, true)
+        faceapi.draw.drawDetections(canvas, faceapi.resizeResults(result, dims))
+        for (var i = 3; i >= 0; i--) {
+            if(typeof faceapi.resizeResults(result, dims)[i] == 'undefined'){ 
+                face_active_array[i]++
+                if(face_active_array[i]>100){
+                    Body.setPosition(facearray[i], { x:-3000, y:-3000}) 
+                    $('#face_wrap_'+(i+1)).css({'left':-3000})
+                    $('#face_wrap_'+(i+1)).css({'top':-3000})
+                    $('#face_wrap_'+(i+1)+' #face_2').addClass('face_ani')
+                }else{
+                    new_pos_array[i][0] = current_pos_array[i][0]
+                    new_pos_array[i][1] = current_pos_array[i][1]
+                }
+            }
+            if(faceapi.resizeResults(result, dims)[i]){
+                if(face_active_array[i]>100){
+                    face_active_array[i]=0
+                    $('#face_wrap_'+(i+1)+' .face_ani').removeClass('face_ani')
+                }
+                // if(current_pos_array[i][0] == 0){
+                //     current_pos_array[i][0] = Math.floor((faceapi.resizeResults(result, dims)[i]._box._x+(faceapi.resizeResults(result, dims)[i]._box._width)/2)/grid)*grid
+                // }
+                // if(current_pos_array[i][1] == 0){
+                //     current_pos_array[i][1] = Math.floor((faceapi.resizeResults(result, dims)[i]._box._y+(faceapi.resizeResults(result, dims)[i]._box._height)/2)/grid)*grid
+                // }
+
+            new_pos_array[i][0] = Math.floor((faceapi.resizeResults(result, dims)[i]._box._x+(faceapi.resizeResults(result, dims)[i]._box._width)/2)/grid)*grid
+            new_pos_array[i][1] = Math.floor((faceapi.resizeResults(result, dims)[i]._box._y+(faceapi.resizeResults(result, dims)[i]._box._height)/2)/grid)*grid
+            if(i == 0){
+                new_pos_array = new_pos_array.sort(sortFunction)
+                for (var j = 3; j >= 0; j--) {
+                    if( current_pos_array[j][0] == new_pos_array[j][0]){}else{
+
+                        current_pos_array[j][1] =  current_pos_array[j][1]-(current_pos_array[j][1] - new_pos_array[j][1])/2
+                        current_pos_array[j][0] =  current_pos_array[j][0]-(current_pos_array[j][0] - new_pos_array[j][0])/2
+                        if(current_pos_array[j][0] - new_pos_array[j][0] > 5 && current_pos_array[j][0] - new_pos_array[j][0] < 30 ){
+                            face_angle_array[j] = face_angle_array[j]+0.5
+                            $('#face_wrap_'+(j+1)+'>div').addClass('face_ani_noloop')
+                            $('#face_wrap_'+(j+1)).addClass('face_wrap_right')
+                            $('#face_wrap_'+(j+1)).removeClass('face_wrap_left')
+                        }
+                        if(current_pos_array[i][0] - new_pos_array[i][0] < -5 && current_pos_array[i][1] - new_pos_array[i][1] < 30 ){
+                          face_angle_array[j]++
+                          $('#face_wrap_'+(j+1)+'>div').hide()
+                          $('#face_wrap_'+(j+1)+'>div').addClass('face_ani_noloop')
+                          $('#face_wrap_'+(j+1)).addClass('face_wrap_left')
+                          $('#face_wrap_'+(j+1)).removeClass('face_wrap_right')
+                        }
+
+                        else if(current_pos_array[j][0] - new_pos_array[j][0] < 5){
+                          $('#face_wrap_'+(j+1)+'>div').removeClass('face_ani_noloop')
+                          $('#face_wrap_'+(j+1)).removeClass('face_wrap_left')
+                          $('#face_wrap_'+(j+1)).removeClass('face_wrap_right')
+                        }
+                    }
+                    $('#face_wrap_'+(i+1)).css({'left':map_range(-1*current_pos_array[i][0],0,640,0,1000)+1000})
+                    $('#face_wrap_'+(i+1)).css({'top':map_range(current_pos_array[i][1],0,480,0,1000)})
+                    Body.setPosition(facearray[i], {
+                        x: map_range(-1*current_pos_array[i][0],0,640,0,1000)+1000,
+                        y: map_range(current_pos_array[i][1],0,480,0,1000)
+                    }) 
+                }
+            }
+
+
+            // $('#face_wrap_'+(i+1)).css({'left':map_range(-1*faceapi.resizeResults(result, dims)[i]._box._x+(faceapi.resizeResults(result, dims)[i]._box._width/2),0,640,0,1000)+1000})
+            // $('#face_wrap_'+(i+1)).css({'top':map_range(faceapi.resizeResults(result, dims)[i]._box._y+(faceapi.resizeResults(result, dims)[i]._box._width/2),0,480,0,1000)})
+          }
+        }
+      }
+
+      setTimeout(() => onPlay())
+    }
+
+    async function run() {
+      // load face detection model
+      // await changeFaceDetector(SSD_MOBILENETV1)
+      await changeFaceDetector(TINY_FACE_DETECTOR)
+      changeInputSize(416)
+
+      // try to access users webcam and stream the images
+      // to the video element
+      const stream = await navigator.mediaDevices.getUserMedia({ video: {} })
+      const videoEl = $('#inputVideo').get(0)
+      videoEl.srcObject = stream
+    }
+
+    function updateResults() {}
+
+    $(document).ready(function() {
+      // renderNavBar('#navbar', 'webcam_face_detection')
+      initFaceDetectionControls()
+      run()
+    })
+  </script>
+</body>
+</html>
